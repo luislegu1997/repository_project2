@@ -11,7 +11,7 @@ class Listing(models.Model):
     Title = models.CharField(max_length=60)
     Price = models.DecimalField(decimal_places=2, max_digits=8)
     Description = models.TextField()
-    categories = (('Home','Home'),('Womens Clothes','Womens Clothes'),('Jewlelery','Jewlelery'),('Mens Clothes','Mens Clothes'),('Tech','Tech'),('Toys','Toys'),('Other','Other'))
+    categories = (('Home','Home'),('Fashion','Fashion'),('Jewlelery','Jewlelery'),('Electronics','Electronics'),('Toys','Toys'),('Other','Other'))
     Category = models.CharField(max_length=16, choices=categories, blank=True)
     time= models.DateField("date added", auto_now_add=True)
     user= models.ForeignKey(User, on_delete=models.CASCADE)
