@@ -1,5 +1,9 @@
 {% extends "auctions/layout.html" %}
 
+{% block script %}
+
+{% endblock %}
+
 {% block body %}
     <h2>Active Listings</h2>
 
@@ -27,6 +31,10 @@
                         <h3>{{listing.Title}}</h3>
 
                         <h5>Price: ${{listing.Price}}</h5> 
+
+                        <br><br>
+
+                        <a href="{% url 'item_page' listing.id %}">View Item</a>
 
                     </div>
 

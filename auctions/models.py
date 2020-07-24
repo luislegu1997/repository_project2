@@ -25,10 +25,28 @@ class Bid(models.Model):
    Value = models.DecimalField(max_digits=10, decimal_places=2)
    user= models.ForeignKey(User, on_delete=models.CASCADE)
    listing = models.ForeignKey('Listing', on_delete=models.CASCADE)
+   date= models.DateField("date added", auto_now_add=True)
+
+   def __str__(self):
+
+       return f"{self.listing} -> {self.user} ({self.Value})"
 
 
 class Comment(models.Model):
     entry = models.TextField()
     user= models.ForeignKey(User, on_delete=models.CASCADE)
     listing = models.ForeignKey('Listing', on_delete=models.CASCADE)
+    date= models.DateField("date added", auto_now_add=True)
+
+    def __str__(self):
+
+        return f"{self.listing} -> {self.user}"
+
     
+
+class Wishlist(models.Model):
+    listing = models.ForeignKey('Listing', on_delete=models.CASCADE)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.listing} -> {self.user}"

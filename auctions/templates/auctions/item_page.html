@@ -1,0 +1,45 @@
+{% extends "auctions/layout.html" %}
+
+
+{% block body %}
+
+    <div class="container">
+
+        <h1>{{item.Title}}</h1>
+
+
+        <div class="row"> 
+
+            <div class="col"> 
+
+
+                <img src="{{item.imgURL}}" height="500vh"  style="padding:10px;" alt="item picture">
+
+            </div>
+
+            <div class="col"> 
+
+                <br>
+
+                <h3>Price: ${{item.Price}}</h3>
+
+                <br>
+
+                <h5>Description:</h5>
+
+                <p>{{item.Description}}</p>
+
+
+                {% if user.is_authenticated %}
+
+                    <a href="">Add to wishlist</a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

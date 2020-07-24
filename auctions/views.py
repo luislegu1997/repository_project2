@@ -108,3 +108,15 @@ def create_listing(request):
         return render(request, "auctions/create_listing.html", {
             'form' : form
         })
+
+
+def item_page(request, item):
+
+
+
+    selected_item = Listing.objects.get(id=item)
+
+    return render(request, "auctions/item_page.html", {
+
+        'item': selected_item
+    })
