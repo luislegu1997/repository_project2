@@ -3,5 +3,53 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    TODO
+    <br><br>
+
+    {% if listings %}
+
+
+        {% for listing in listings %}
+
+            <div class="container" style="max-width: 99%">
+
+                <div class="row" style="margin-bottom:8vh">         
+                    
+
+                    <div class="col-sm" style="align-items: center">
+
+                        <img src={{listing.imgURL}} height=200vh style="padding:5px;">
+
+                    </div>
+        
+                   
+                    <div class="col-sm" style="padding-left:15px"> 
+
+                        <h3>{{listing.Title}}</h3>
+
+                        <h5>Price: ${{listing.Price}}</h5> 
+
+                    </div>
+
+                                              
+                    <div class="col-sm">
+
+                        <p>{{listing.Description}}</p>
+                        
+                    </div>
+                       
+
+                </div>
+        
+
+            </div>
+        
+        {% endfor %}
+
+    {% else %}
+
+        No items
+    
+    {% endif %}
+
+
 {% endblock %}
