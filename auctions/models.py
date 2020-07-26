@@ -24,7 +24,7 @@ class Listing(models.Model):
 class Bid(models.Model):
    Value = models.DecimalField(max_digits=10, decimal_places=2)
    user= models.ForeignKey(User, on_delete=models.CASCADE)
-   listing = models.ForeignKey('Listing', on_delete=models.CASCADE)
+   listing = models.ForeignKey('Listing', on_delete=models.CASCADE, related_name='listing_bids')
    date= models.DateField("date added", auto_now_add=True)
 
    def __str__(self):
@@ -44,9 +44,9 @@ class Comment(models.Model):
 
     
 
-class Wishlist(models.Model):
+class Watchlist(models.Model):
     listing = models.ForeignKey('Listing', on_delete=models.CASCADE)
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='This_User_Watchlist')
 
     def __str__(self):
         return f"{self.listing} -> {self.user}"

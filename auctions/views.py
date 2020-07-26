@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 
-from .models import User, Listing
+from .models import User, Listing, Watchlist, Bid
 
 from django import forms
 
@@ -110,13 +110,148 @@ def create_listing(request):
         })
 
 
+
 def item_page(request, item):
-
-
 
     selected_item = Listing.objects.get(id=item)
 
+    your_item = False
+
+    bids_so_far = 0
+
+    bid_winning_so_far = False
+
+    try:
+
+        usr = User.objects.get(username=request.user)
+
+
+        if usr == selected_item.user :
+
+            your_item = True
+
+    except:
+
+        print("User not found")
+
+    watchlist_items= True
+
+    try:
+
+        Watchlist.objects.get(listing=selected_item, user=usr)
+
+    
+    except:
+
+        watchlist_items= False
+
+
+    try:
+
+        current_bids = Bid.objects.filter(listing=selected_item)
+
+        bids_so_far = len(current_bids)
+       
+        current_bids = sorted(current_bids, key=lambda bid: bid.Value, reverse=True)[0]
+
+        if current_bids.user == request.user:
+
+            bid_winning_so_far = True
+
+
+    except:
+
+        current_bids = Bid( Value= selected_item.Price, user= usr, listing=selected_item)
+
+        current_bids.save()
+
+
     return render(request, "auctions/item_page.html", {
 
-        'item': selected_item
+        'item': selected_item,
+
+        'watchlist_items' : watchlist_items,
+
+        'current_bid' : current_bids,
+
+        'your_item': your_item,
+
+        'bids_so_far': bids_so_far,
+
+        'bid_winning_so_far': bid_winning_so_far
     })
+
+
+
+def WatchlistAdd(request, item):
+
+    selected_item = Listing.objects.get(id=item)
+
+    user = User.objects.get(username=request.user)
+
+    data = Watchlist(listing=selected_item, user=user)
+
+    data.save()
+
+    return HttpResponseRedirect(reverse('index'))
+
+
+def RemoveWatchlist(request, item):
+
+    selected_item = Listing.objects.get(id=item)
+
+    user = User.objects.get(username=request.user)
+
+    data= Watchlist.objects.get(listing=selected_item, user=user)
+
+    data.delete()
+
+    return HttpResponseRedirect(reverse('index'))
+
+
+
+
+def Bid_money(request, item):
+
+    selected_item = Listing.objects.get(id=item)
+
+    user = User.objects.get(username=request.user)
+
+    bd = request.POST['bid_made']
+
+    all_bids = selected_item.listing_bids.all()
+
+    all_bids = sorted(all_bids, key=lambda bid: bid.Value, reverse=True)
+
+    print(all_bids)
+
+    if selected_item.user == user:
+
+        return render(request, 'auctions/error.html', {
+
+           'message': "you can´t bid your own listing"
+       })
+
+    elif float(bd) < float(all_bids[0].Value):
+
+       return render(request, 'auctions/error.html', {
+
+           'message': "bid must be higher"
+       })
+
+    
+    data = Bid(Value=bd, user=user, listing=selected_item)
+
+    data.save()
+
+    return HttpResponseRedirect(reverse('index'))
+
+
+def Delete_item(request, item):
+
+    selected_item = Listing.objects.get(id=item)
+
+    selected_item.delete()
+
+    return HttpResponseRedirect(reverse('index'))
+

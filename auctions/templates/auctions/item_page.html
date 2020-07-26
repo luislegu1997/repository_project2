@@ -7,7 +7,6 @@
 
         <h1>{{item.Title}}</h1>
 
-
         <div class="row"> 
 
             <div class="col"> 
@@ -19,22 +18,85 @@
 
             <div class="col"> 
 
+                {% if your_item %}
+
+                    <h6>Your item</h6>
+
+                    <form action="{% url 'delete_item' item.id %}" method="post">
+                        
+                        {% csrf_token %}
+
+                        <button>Delete Item</button>
+
+                    </form>
+            
+                {% endif %}
+
                 <br>
 
-                <h3>Price: ${{item.Price}}</h3>
+                <h3>${{current_bid.Value}}</h3>
 
                 <br>
 
-                <h5>Description:</h5>
+                {% if bid_winning_so_far %}
 
-                <p>{{item.Description}}</p>
+                    <p>{{bids_so_far}} bid(s) so far. Your bid is the current bid.</p>
+
+                {% else %}
+
+                    <p>{{bids_so_far}} bid(s) so far.</p>
+
+                {% endif %}
 
 
                 {% if user.is_authenticated %}
 
-                    <a href="">Add to wishlist</a>
+                    <form action="{% url 'Bid' item.id %}" method="post"> 
+
+                        {% csrf_token %}
+
+                        <input type="integer" placeholder="bid" name="bid_made">
+
+                        <button type="submit">Bid</button>
+
+                    </form>
+
+                    <br><br>
+
+                    {% if watchlist_items  %}
+
+                        <form action="{% url 'RemoveWatchlist' item.id %}" method="post">
+
+                            {% csrf_token %}
+
+                            <button type="submit">Remove from Watchlist</button>
+                            
+                        </form>
+
+                    {% else %}
+
+                        {% if your_item == False %}
+
+                            <form action="{% url 'WatchlistAdd' item.id %}" method="post">
+
+                                {% csrf_token %}
+
+                                <button type="submit">Add to Watchlist</button>
+                            
+                            </form>
+
+                        {% endif %}
+
+
+                    {% endif %}
 
                 {% endif %}
+
+                <br><br>
+
+                <h5>Description:</h5>
+
+                <p>{{item.Description}}</p>
 
             </div>
 
