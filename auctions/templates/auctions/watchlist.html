@@ -1,0 +1,42 @@
+{% extends "auctions/layout.html"%}
+
+
+{% block body %}
+
+    {% for item in watchlst %}
+
+    <div class="container" style="max-width: 99%">
+
+        <div class="row" style="margin-bottom:8vh">
+
+            <div class="col">
+
+                <img src={{item.listing.imgURL}} height=200vh style="padding:5px;" alt="Item image">
+
+            </div>
+
+            <div class="col">
+              
+                <h2>{{item.listing.Title}}</h2>
+
+                <h4>Price: {{item.listing.Price}}</h4>
+
+                <br><br>
+
+                <a href="{% url 'item_page' item.listing.id %}">View item</a>
+
+            </div>
+
+            <div class="col">
+
+                <h4>Description:</h4>
+
+                <p>{{item.listing.Description}}</p>
+                
+            </div>
+
+        </div>
+    </div> 
+
+    {% endfor %}
+{% endblock %}

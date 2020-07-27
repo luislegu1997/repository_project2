@@ -302,3 +302,13 @@ def Comment_add(request, item):
 
 
 
+def Watchlist_display(request):
+
+   usr = User.objects.get(username=request.user)
+
+   watchlst = usr.This_User_Watchlist.all()
+
+   return render(request, "auctions/watchlist.html", {
+
+       'watchlst' : watchlst
+   })
