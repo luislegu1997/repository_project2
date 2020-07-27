@@ -12,5 +12,7 @@ urlpatterns = [
     path('addtoWatchlist-<str:item>', views.WatchlistAdd, name="WatchlistAdd"),
     path('removeFromWatchlist-<str:item>', views.RemoveWatchlist, name="RemoveWatchlist"),
     path('bid-<str:item>', views.Bid_money, name="Bid"),
-    path('delete-<str:item>', views.Delete_item, name="delete_item")
+    path('delete-<str:item>', views.Delete_item, name="delete_item"),
+    path('close-<str:item>', views.Close, name="close"),
+    path('add_comment-<str:item>', views.Comment_add, name="add_comment"),
 ]

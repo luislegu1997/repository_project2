@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 
-from .models import User, Listing, Watchlist, Bid
+from .models import User, Listing, Watchlist, Bid, Comment
 
 from django import forms
 
@@ -121,26 +121,35 @@ def item_page(request, item):
 
     bid_winning_so_far = False
 
+    watchlist_items= True
+
+    you_won = False
+
+    comments_of_item = selected_item.item_comments.all()
+
     try:
 
         usr = User.objects.get(username=request.user)
-
 
         if usr == selected_item.user :
 
             your_item = True
 
+
+        if selected_item.winner == usr:
+
+            you_won = True
+
+    
     except:
 
-        print("User not found")
+        print("user not found")
 
-    watchlist_items= True
 
     try:
 
         Watchlist.objects.get(listing=selected_item, user=usr)
 
-    
     except:
 
         watchlist_items= False
@@ -178,7 +187,12 @@ def item_page(request, item):
 
         'bids_so_far': bids_so_far,
 
-        'bid_winning_so_far': bid_winning_so_far
+        'bid_winning_so_far': bid_winning_so_far,
+
+        'you_won': you_won,
+
+        'comments_of_item': comments_of_item
+
     })
 
 
@@ -223,8 +237,6 @@ def Bid_money(request, item):
 
     all_bids = sorted(all_bids, key=lambda bid: bid.Value, reverse=True)
 
-    print(all_bids)
-
     if selected_item.user == user:
 
         return render(request, 'auctions/error.html', {
@@ -239,7 +251,6 @@ def Bid_money(request, item):
            'message': "bid must be higher"
        })
 
-    
     data = Bid(Value=bd, user=user, listing=selected_item)
 
     data.save()
@@ -254,4 +265,40 @@ def Delete_item(request, item):
     selected_item.delete()
 
     return HttpResponseRedirect(reverse('index'))
+
+
+
+def Close(request, item):
+
+    selected_item = Listing.objects.get(id=item)
+
+    bids = selected_item.listing_bids.all()
+
+    winner_bid = sorted(bids, key=lambda bid: bid.Value, reverse=True)[0]
+
+    winner = User.objects.get(username=winner_bid.user )
+
+    selected_item.winner = winner
+
+    selected_item.save()
+
+    return HttpResponseRedirect(reverse('item_page', kwargs={'item': selected_item.id}))
+
+
+
+def Comment_add(request, item):
+
+    selected_item = Listing.objects.get(id=item)
+
+    comment_posted = request.POST['comment'] 
+
+    usr = User.objects.get(username=request.user)
+
+    data = Comment(entry=comment_posted, user= usr, listing=selected_item)
+    
+    data.save()
+
+    return HttpResponseRedirect(reverse('item_page', kwargs={"item": selected_item.id}))
+
+
 
