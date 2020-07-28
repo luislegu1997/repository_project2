@@ -15,5 +15,7 @@ urlpatterns = [
     path('delete-<str:item>', views.Delete_item, name="delete_item"),
     path('close-<str:item>', views.Close, name="close"),
     path('add_comment-<str:item>', views.Comment_add, name="add_comment"),
-    path('Watchlist', views.Watchlist_display, name="watchlist")
+    path('Watchlist', views.Watchlist_display, name="watchlist"),
+    path('Categories', views.Categories, name ="Categories"),
+    path('Category-<str:category>', views.Category_selected, name ="Category")
 ]

@@ -16,11 +16,7 @@ class listingForm(forms.ModelForm):
         model = Listing
         fields = ('Title', 'Description', 'Price', 'imgURL','Category')
 
-
-
-
 def index(request):
-
 
     return render(request, "auctions/index.html", {
 
@@ -312,3 +308,18 @@ def Watchlist_display(request):
 
        'watchlst' : watchlst
    })
+
+def Categories(request):
+
+    return render(request, "auctions/categories.html", {
+
+        'categories' : ['Home','Fashion','Jewlelery','Electronics','Toys','Other']
+    })
+
+
+def Category_selected(request, category):
+
+    return render(request, 'auctions/index.html', {
+
+        'listings' : Listing.objects.filter(Category=category)
+    })
