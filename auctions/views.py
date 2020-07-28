@@ -166,7 +166,7 @@ def item_page(request, item):
 
     except:
 
-        current_bids = Bid( Value= selected_item.Price, user= usr, listing=selected_item)
+        current_bids = Bid(Value= selected_item.Price, user= usr, listing=selected_item)
 
         current_bids.save()
 
