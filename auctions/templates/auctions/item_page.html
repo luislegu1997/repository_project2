@@ -63,15 +63,19 @@
 
                     {% if user.is_authenticated %}
 
-                        <form action="{% url 'Bid' item.id %}" method="post"> 
+                        {% if your_item == False %}
 
-                            {% csrf_token %}
+                            <form action="{% url 'Bid' item.id %}" method="post"> 
 
-                            <input type="integer" placeholder="bid" name="bid_made">
+                                {% csrf_token %}
 
-                            <button type="submit">Bid</button>
+                                <input type="integer" placeholder="bid" name="bid_made">
 
-                        </form>
+                                <button type="submit">Bid</button>
+
+                            </form>
+                        
+                        {% endif %}
 
                         <br>
 
@@ -120,7 +124,7 @@
                             
                             {% csrf_token %}
 
-                            <button>Close</button>
+                            <button>Close Listing</button>
 
                         </form>
                 

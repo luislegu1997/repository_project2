@@ -233,23 +233,20 @@ def Bid_money(request, item):
 
     all_bids = sorted(all_bids, key=lambda bid: bid.Value, reverse=True)
 
-    if selected_item.user == user:
-
-        return render(request, 'auctions/error.html', {
-
-           'message': "you can´t bid your own listing"
-       })
-
-    elif float(bd) < float(all_bids[0].Value):
+    if float(bd) < float(all_bids[0].Value):
 
        return render(request, 'auctions/error.html', {
 
-           'message': "bid must be higher"
+           'message': "Your bid must be higher than current price"
        })
 
     data = Bid(Value=bd, user=user, listing=selected_item)
 
     data.save()
+
+    selected_item.Price = bd
+
+    selected_item.save()
 
     return HttpResponseRedirect(reverse('index'))
 
